@@ -1,4 +1,4 @@
-# [Buried Alive! (Continued)]()
+# [Buried Alive! (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=3443342391)
 
 ![Image](https://i.imgur.com/buuPQel.png)
 
@@ -12,11 +12,6 @@ Update of 1trickPonytas mod https://steamcommunity.com/sharedfiles/filedetails/?
 
 Bury downed pawns alive. Note: This will kill them.
 	
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-If you enjoy my work and want to support me and my family, please buy me a coffee: 
-https://ko-fi.com/1trickpwnyta
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 ![Image](https://i.imgur.com/PwoNOj4.png)
 
 
@@ -29,4 +24,6 @@ https://ko-fi.com/1trickpwnyta
 -  If you have the solution for a problem, please post it to the GitHub repository.
 -  Use [RimSort](https://github.com/RimSort/RimSort/releases/latest) to sort your mods
 
+ 
 
+[![Image](https://img.shields.io/github/v/release/emipa606/BuriedAlive?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/3443342391) | tags: burial

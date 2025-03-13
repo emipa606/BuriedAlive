@@ -14,11 +14,15 @@ public static class Building_CorpseCasket_HasCorpse
             return;
         }
 
-        if (grave.ContainedThing is not Pawn)
+        foreach (var thing in grave.GetDirectlyHeldThings())
         {
+            if (thing is not Pawn pawn || pawn.Dead)
+            {
+                continue;
+            }
+
+            __result = true;
             return;
         }
-
-        __result = true;
     }
 }

@@ -15,18 +15,17 @@ public static class Building_Casket_TickRare
             return;
         }
 
-        if (grave.ContainedThing is not Pawn pawn)
+        foreach (var thing in grave.GetDirectlyHeldThings())
         {
-            return;
-        }
+            if (thing is not Pawn pawn || pawn.Dead)
+            {
+                continue;
+            }
 
-        if (pawn.Dead)
-        {
-            return;
+            var part = pawn.health.hediffSet.GetNotMissingParts().Where(record => record.coverageAbs > 0)
+                .RandomElement();
+            pawn.TakeDamage(new DamageInfo(DamageDefOf.Crush, 15f, 99999f, -1f, grave, part, null,
+                DamageInfo.SourceCategory.ThingOrUnknown, null, true, false));
         }
-
-        var part = pawn.health.hediffSet.GetNotMissingParts().Where(record => record.coverageAbs > 0).RandomElement();
-        pawn.TakeDamage(new DamageInfo(DamageDefOf.Crush, 15f, 99999f, -1f, grave, part, null,
-            DamageInfo.SourceCategory.ThingOrUnknown, null, true, false));
     }
 }

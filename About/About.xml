@@ -39,11 +39,6 @@ Update of 1trickPonytas mod https://steamcommunity.com/sharedfiles/filedetails/?
 [img]https://i.imgur.com/Z4GOv8H.png[/img]
 Bury downed pawns alive. Note: This will kill them.
 	
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-If you enjoy my work and want to support me and my family, please buy me a coffee: 
-https://ko-fi.com/1trickpwnyta
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 [img]https://i.imgur.com/PwoNOj4.png[/img]
 [list]
 [*] See if the the error persists if you just have this mod and its requirements active.
@@ -53,6 +48,8 @@ https://ko-fi.com/1trickpwnyta
 [*] Do not report errors by making a discussion-thread, I get no notification of that.
 [*] If you have the solution for a problem, please post it to the GitHub repository.
 [*] Use [url=https://github.com/RimSort/RimSort/releases/latest]RimSort[/url] to sort your mods
-[/list]</description>
-  <modVersion IgnoreIfNoMatchingField="True">1.5.0</modVersion>
+[/list] 
+
+[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/3443342391][img]https://img.shields.io/github/v/release/emipa606/BuriedAlive?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url] | tags: burial</description>
+  <modVersion IgnoreIfNoMatchingField="True">1.5.1</modVersion>
 </ModMetaData>
