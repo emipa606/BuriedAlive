@@ -12,7 +12,7 @@ public static class BuriedAlive
 
     static BuriedAlive()
     {
-        MassGravesLoaded = ModLister.GetActiveModWithIdentifier("pyrce.mass.graves.continued") != null;
+        MassGravesLoaded = ModLister.GetActiveModWithIdentifier("pyrce.mass.graves.continued", true) != null;
 
         new Harmony("buriedalive.1trickPonyta").PatchAll();
         if (!MassGravesLoaded)

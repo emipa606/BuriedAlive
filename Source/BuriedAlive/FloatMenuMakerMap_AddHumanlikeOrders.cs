@@ -1,55 +1,59 @@
-﻿using System.Collections.Generic;
-using HarmonyLib;
-using RimWorld;
-using UnityEngine;
+﻿using RimWorld;
 using Verse;
 using Verse.AI;
 
 namespace BuriedAlive;
 
-[HarmonyPatch(typeof(FloatMenuMakerMap), "AddHumanlikeOrders")]
-public static class FloatMenuMakerMap_AddHumanlikeOrders
+public class FloatMenuOptionProvider_BuryAlive : FloatMenuOptionProvider
 {
-    public static void Postfix(ref Vector3 clickPos, ref Pawn pawn, ref List<FloatMenuOption> opts)
+    protected override bool Drafted => true;
+
+    protected override bool Undrafted => true;
+
+    protected override bool Multiselect => false;
+
+    protected override bool RequiresManipulation => true;
+
+    protected override FloatMenuOption GetSingleOptionFor(Pawn clickedPawn, FloatMenuContext context)
     {
-        foreach (var localTargetInfo in GenUI.TargetsAt(clickPos, TargetingParameters.ForRescue(pawn), true))
+        if (!clickedPawn.Downed)
         {
-            var victim = (Pawn)localTargetInfo.Thing;
-            if (!victim.Downed ||
-                !pawn.CanReserveAndReach(victim, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, true) ||
-                GraveTool.FindGraveFor(victim, pawn, true) == null)
+            return null;
+        }
+
+        if (!context.FirstSelectedPawn.CanReserveAndReach(clickedPawn, PathEndMode.OnCell, Danger.Deadly, 1, -1, null,
+                true))
+        {
+            return null;
+        }
+
+        if (GraveTool.FindGraveFor(clickedPawn, context.FirstSelectedPawn, true) == null)
+        {
+            return null;
+        }
+
+        var taggedString = "BuriedAlive_BuryAliveNew".Translate(clickedPawn.LabelCap);
+
+        return FloatMenuUtility.DecoratePrioritizedTask(
+            new FloatMenuOption(taggedString, action, MenuOptionPriority.Default, null, clickedPawn),
+            context.FirstSelectedPawn, clickedPawn);
+
+        void action()
+        {
+            var grave = GraveTool.FindGraveFor(clickedPawn, context.FirstSelectedPawn) ??
+                        GraveTool.FindGraveFor(clickedPawn, context.FirstSelectedPawn, true);
+
+            if (grave == null)
             {
-                continue;
+                Messages.Message(
+                    "BuriedAlive_CannotBuryAlive".Translate() + ": " + "BuriedAlive_NoGrave".Translate(), clickedPawn,
+                    MessageTypeDefOf.RejectInput, false);
+                return;
             }
 
-            string text = "BuriedAlive_BuryAlive".Translate(localTargetInfo.Thing.LabelCap, localTargetInfo.Thing);
-            var jDef = BuriedDefs.BuryAlive;
-            var burier = pawn;
-
-            opts.Add(FloatMenuUtility.DecoratePrioritizedTask(
-                new FloatMenuOption(text, Action, MenuOptionPriority.Default, null, victim), pawn, victim));
-            continue;
-
-            void Action()
-            {
-                var grave = GraveTool.FindGraveFor(victim, burier);
-                if (grave == null)
-                {
-                    grave = GraveTool.FindGraveFor(victim, burier, true);
-                }
-
-                if (grave == null)
-                {
-                    Messages.Message(
-                        "BuriedAlive_CannotBuryAlive".Translate() + ": " + "BuriedAlive_NoGrave".Translate(), victim,
-                        MessageTypeDefOf.RejectInput, false);
-                    return;
-                }
-
-                var job = JobMaker.MakeJob(jDef, victim, grave);
-                job.count = 1;
-                burier.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-            }
+            var job = JobMaker.MakeJob(BuriedDefs.BuryAlive, clickedPawn, grave);
+            job.count = 1;
+            context.FirstSelectedPawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
         }
     }
 }

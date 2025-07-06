@@ -8,13 +8,13 @@ namespace BuriedAlive;
 public class JobDriver_BuryAlive : JobDriver_HaulToContainer
 {
     private Effecter graveDigEffect;
-    protected Pawn Takee => (Pawn)job.GetTarget(TargetIndex.A).Thing;
+    private Pawn Taker => (Pawn)job.GetTarget(TargetIndex.A).Thing;
 
-    protected Building_Grave Grave => (Building_Grave)job.GetTarget(TargetIndex.B).Thing;
+    private Building_Grave Grave => (Building_Grave)job.GetTarget(TargetIndex.B).Thing;
 
     public override bool TryMakePreToilReservations(bool errorOnFailed)
     {
-        return pawn.Reserve(Takee, job, 1, -1, null, errorOnFailed) &&
+        return pawn.Reserve(Taker, job, 1, -1, null, errorOnFailed) &&
                pawn.Reserve(Grave, job, 1, -1, null, errorOnFailed);
     }
 
@@ -23,16 +23,16 @@ public class JobDriver_BuryAlive : JobDriver_HaulToContainer
         this.FailOnDestroyedOrNull(TargetIndex.A);
         this.FailOnDestroyedOrNull(TargetIndex.B);
         this.FailOnAggroMentalState(TargetIndex.A);
-        this.FailOn(() => !Grave.Accepts(Takee));
-        var goToTakee = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.OnCell)
+        this.FailOn(() => !Grave.Accepts(Taker));
+        var goToTaker = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.OnCell)
             .FailOnDestroyedNullOrForbidden(TargetIndex.A).FailOnDespawnedNullOrForbidden(TargetIndex.B)
-            .FailOn(() => !GraveTool.GraveEmpty(Grave)).FailOn(() => !Takee.Downed)
-            .FailOn(() => !pawn.CanReach(Takee, PathEndMode.OnCell, Danger.Deadly))
+            .FailOn(() => !GraveTool.GraveEmpty(Grave)).FailOn(() => !Taker.Downed)
+            .FailOn(() => !pawn.CanReach(Taker, PathEndMode.OnCell, Danger.Deadly))
             .FailOnSomeonePhysicallyInteracting(TargetIndex.A);
         var startCarryingTakee = Toils_Haul.StartCarryThing(TargetIndex.A);
         var goToThing = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch);
-        yield return Toils_Jump.JumpIf(goToThing, () => pawn.IsCarryingPawn(Takee));
-        yield return goToTakee;
+        yield return Toils_Jump.JumpIf(goToThing, () => pawn.IsCarryingPawn(Taker));
+        yield return goToTaker;
         yield return startCarryingTakee;
         yield return goToThing;
         var toil = Toils_General.Wait(500, TargetIndex.B);
@@ -71,7 +71,7 @@ public class JobDriver_BuryAlive : JobDriver_HaulToContainer
         yield return toil;
         yield return new Toil
         {
-            initAction = delegate { Grave.TryAcceptThing(Takee); },
+            initAction = delegate { Grave.TryAcceptThing(Taker); },
             defaultCompleteMode = ToilCompleteMode.Instant
         };
     }

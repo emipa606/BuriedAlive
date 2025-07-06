@@ -16,15 +16,15 @@ public static class GraveTool
             thingReq = ThingRequest.ForGroup(ThingRequestGroup.Grave);
         }
 
-        var peMode = PathEndMode.ClosestTouch;
+        const PathEndMode peMode = PathEndMode.ClosestTouch;
         var traverseParams = TraverseParms.For(carrier);
-        var maxDistance = 9999f;
+        const float maxDistance = 9999f;
 
         var grave = (Building_Grave)GenClosest.ClosestThingReachable(position, map, thingReq, peMode, traverseParams,
-            maxDistance, Validator);
+            maxDistance, validator);
         return grave;
 
-        bool Validator(Thing building)
+        bool validator(Thing building)
         {
             if (!carrier.CanReserve(building, 1, -1, null, ignoreOtherReservations))
             {
